@@ -25,13 +25,12 @@ class TVMaze:
 
     @staticmethod
     def get_episodes_list(json_response, season_num):
-        list_of_episodes = []
-        for episode in json_response:
-            if episode["season"] == int(season_num):
-                list_of_episodes.append(episode["name"])
-
+        season = int(season_num)
+        list_of_episodes = [episode["name"] for episode in json_response
+                            if episode["season"] == season]
         return list_of_episodes
 
     @staticmethod
     def get_show_id(json_response):
+        # TODO - allow user to select the show from the json
         return json_response[0]["show"]["id"]

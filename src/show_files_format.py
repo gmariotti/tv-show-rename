@@ -21,5 +21,4 @@ class ShowFileFormat:
             episode_name = episode_name.replace(":name", episode)
             epis_num += 1
             list_of_files.append(episode_name)
-        #print list_of_files
         return list_of_files

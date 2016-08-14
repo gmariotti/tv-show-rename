@@ -1,2 +1,6 @@
+# PyCharm stuff
+.idea/
+
+# Python stuff
 *.pyc
 .cache/

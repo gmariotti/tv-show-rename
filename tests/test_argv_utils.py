@@ -1,6 +1,6 @@
 import unittest
 from sys import argv
-from src.Util.ArgvUtil import manage_command_line
+from src.utils.argv_utils import manage_command_line
 
 
 class TestArgvUtil(unittest.TestCase):

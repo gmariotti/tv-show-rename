@@ -2,17 +2,14 @@ import os
 import shutil
 
 
+# TODO - change of directory must be done outside as a decorator
 def get_list_of_files(dirname):
     curr_dir = os.getcwd()
     os.chdir(dirname)
-    list = []
-    for filename in os.listdir("."):
-        if os.path.isfile(filename):
-            print(filename)
-            list.append(filename)
+    files = [name for name in os.listdir(".") if os.path.isfile(name)]
     os.chdir(curr_dir)  # return to the script directory
 
-    return list
+    return files
 
 
 def test_function(list_of_files):
@@ -22,7 +19,7 @@ def test_function(list_of_files):
             shutil.copy2(filename, filename + str(i))
             i += 1
 
-    print ("New list of file")
+    print("New list of file")
     for filename in os.listdir("."):
         print(filename)
 
