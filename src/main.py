@@ -33,9 +33,10 @@ def reorder():
 
 # main.py
 if __name__ == "__main__":
-    directory, show, fileEx, subEx = manage_command_line()
+    directory, show, seasonNum, fileEx, subEx = manage_command_line()
     print("Working directory = {}".format(directory))
     print("Name of the TV Show = {}".format(show))
+    print("Season number = {}".format(seasonNum))
     print("List of file extensions = {}".format(fileEx))
     print("List of subtitle extensions = {}".format(subEx))
 
@@ -45,17 +46,12 @@ if __name__ == "__main__":
         print("File found in directory")
         for filename in listOfFiles:
             print("- {}".format(filename))
-        # test_remove_temp_files(directory)
-        # test_create_temp_dir(directory, listOfFiles)
+        test_remove_temp_files(directory)
+        test_create_temp_dir(directory, listOfFiles)
 
     except OSError as e:
         print(e)
         exit(0)
-
-    # insert the season number
-    # TODO - move to terminal arguments
-    print("\nInsert the season number")
-    seasonNum = input("> ")
 
     listOfEpisodes = get_episodes_list(show, seasonNum)
 
@@ -70,31 +66,46 @@ if __name__ == "__main__":
         exit(0)
 
     # TODO - strategy pattern
-    listOfNewFilesName = ShowFileFormat.get_S0xE0x_format(listOfEpisodes, show,
+    listOfNewFilenames = ShowFileFormat.get_S0xE0x_format(listOfEpisodes, show,
                                                           seasonNum)
     print("New list of file names")
-    for newFilename in listOfNewFilesName:
-        print("- {}".format(newFilename))
-    # TODO - start from here
-    exit(0)
+    mapNewFilenames = {i: listOfNewFilenames[i - 1]
+                       for i in range(1, len(listOfNewFilenames) + 1)}
+    for key, filename in mapNewFilenames.items():
+        print("[{}] - {}".format(key, filename))
 
+    # save current directory and go to the working one
     curr_dir = os.getcwd()
     os.chdir(directory)
     os.chdir("./temp")
 
-    count = 1
+    print("Manual renaming")
     for file in listOfFiles:
-        # is a
-        if str(file).endswith(fileEx):
-            epname = listOfEpisodes[count - 1]
-            epnumBigE = "E{}".format(count)
-            epnumSmallE = "e{}".format(count)
-            if count < 10:
-                epnumBigE = "E0{}".format(count)
-                epnumSmallE = "e0{}".format(count)
-            print(file)
-            print(listOfNewFilesName[count - 1])
-            if file.__contains__(epname) or file.__contains__(epnumBigE) or \
-                    file.__contains__(epnumSmallE):
-                os.rename(file, listOfNewFilesName[count - 1] + fileEx)
-                count += 1
+        filename, extension = os.path.splitext(file)
+        print("{} - {}".format(filename, extension))
+        try:
+            option = int(input("episode: "))
+            if 0 < option < len(listOfNewFilenames) + 1:
+                newFilename = "{}{}".format(mapNewFilenames[option], extension)
+                os.rename(file, newFilename)
+                print("{} --> {}".format(file, newFilename))
+        except ValueError as e:
+            print(e)
+
+# if file.endswith((*fileEx,)):
+#     # is a video file
+#     epname = listOfEpisodes[count - 1]
+#     epnumBigE = "E{}".format(count)
+#     epnumSmallE = "e{}".format(count)
+#     if count < 10:
+#         epnumBigE = "E0{}".format(count)
+#         epnumSmallE = "e0{}".format(count)
+#     print(file)
+#     print(listOfNewFilenames[count - 1])
+#     if file.__contains__(epname) or file.__contains__(epnumBigE) or \
+#             file.__contains__(epnumSmallE):
+#         os.rename(file, listOfNewFilenames[count - 1] + fileEx)
+#         count += 1
+# elif file.endswith((*subEx,)):
+#     # is a subtitle file
+#     pass

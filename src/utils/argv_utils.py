@@ -6,6 +6,7 @@ import argparse
 message_directory = "Allows to insert the directory in which the files are " \
                     "located."
 message_show = "TODO"
+message_season = ""
 message_extension_file = """allows to define the extension of the file.
                             Insert the extension as a <ext>
                             Default value is .mkv
@@ -37,6 +38,9 @@ def manage_command_line():
     # Name of the tv show
     parser.add_argument("show", help=message_show)
 
+    # Season number
+    parser.add_argument("season", help=message_season, type=int)
+
     # Files extension is optional. Use it just to speed up the research
     parser.add_argument("-exf", "--extensionfile", help=message_extension_file)
 
@@ -55,7 +59,8 @@ def manage_command_line():
     if args.extensionsub is not None:
         ext_sub_choices = [args.extensionsub]
 
-    return args.directory, args.show, ext_file_choices, ext_sub_choices
+    return args.directory, args.show, args.season, ext_file_choices, \
+           ext_sub_choices
 
 
 if __name__ == "__main__":
